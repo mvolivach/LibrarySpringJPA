@@ -1,0 +1,68 @@
+package ua.volivach.library.models;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
+
+import java.util.List;
+
+@Entity
+@Table(name = "person")
+public class Person {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @NotEmpty(message = "Name should not be empty")
+    @Pattern(regexp = "[A-ZА-Я][a-zа-я]+ [A-ZА-Я][a-zа-я]+ [A-ZА-Я][a-zа-я]+", message = "Full name should be valid in next format: Name Surname Patronymic")
+    @Column(name = "full_name")
+    private String fullName;
+
+    @Min(value = 1900, message = "Birth year should be greater than 1900")
+    @Max(value = 2025, message = "Birth year should be not greater than 2025")
+    @NotNull
+    @Column(name = "birth_year")
+    private int birthYear;
+
+    @OneToMany(mappedBy = "owner")
+    private List<Book> books;
+
+    public Person(String fullName, int birthYear) {
+        this.fullName = fullName;
+        this.birthYear = birthYear;
+    }
+
+    public Person() {}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
+    }
+}
