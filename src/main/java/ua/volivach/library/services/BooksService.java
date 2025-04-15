@@ -10,6 +10,7 @@ import ua.volivach.library.models.Book;
 import ua.volivach.library.models.Person;
 
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -74,6 +75,7 @@ public class BooksService {
     @Transactional
     public void assign(int id, Person selectedPerson) {
         Book book = booksRepository.findById(id).orElseThrow();
+        book.setTimeOwn(new Date());
         book.setOwner(selectedPerson);
         booksRepository.save(book);
     }

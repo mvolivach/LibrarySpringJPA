@@ -2,6 +2,11 @@ package ua.volivach.library.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
 
 @Entity
 @Table(name = "book")
@@ -22,6 +27,28 @@ public class Book {
     @Max(value = 2025, message = "Birth year should be not greater than 2025")
     @Column(name = "year")
     private int year;
+
+    @Column(name = "time_own")
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm:ss")
+    private Date timeOwn;
+
+    @Transient
+    private boolean overdue;
+
+    public boolean isOverdue() {
+        if (this.timeOwn == null) return false;
+
+        Instant timeOwnInstant = this.timeOwn.toInstant();
+        Instant deadline = timeOwnInstant.plus(Duration.ofDays(10));
+
+        return Instant.now().isAfter(deadline);
+    }
+
+
+    public void setOverdue(boolean overdue) {
+        this.overdue = overdue;
+    }
 
     @ManyToOne
     @JoinColumn(name = "person_id", referencedColumnName = "id")
@@ -74,5 +101,13 @@ public class Book {
 
     public void setOwner(Person owner) {
         this.owner = owner;
+    }
+
+    public Date getTimeOwn() {
+        return timeOwn;
+    }
+
+    public void setTimeOwn(Date timeOwn) {
+        this.timeOwn = timeOwn;
     }
 }

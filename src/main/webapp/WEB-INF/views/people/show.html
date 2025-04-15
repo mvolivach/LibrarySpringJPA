@@ -16,7 +16,7 @@
 <div th:if="${!books.isEmpty()}"><p>Books:</p>
     <ul>
         <li th:each="book : ${books}"
-            th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">VALUE</li>
+            th:style="${book.isOverdue()} ? 'color: red;' : ''" th:text="${book.getName()} + ', ' + ${book.getAuthor()} + ', ' + ${book.getYear()}">VALUE</li>
     </ul>
     <hr/>
 </div>
