@@ -40,6 +40,10 @@ public class BooksService {
         return booksRepository.findAll(PageRequest.of(page, itemsPerPage, Sort.by(sortBy))).getContent();
     }
 
+    public List<Book> findByNameStartingWith(String name) {
+        return booksRepository.findByNameStartingWith(name);
+    }
+
     public Book findOne(int id) {
         return booksRepository.findById(id).orElse(null);
     }
