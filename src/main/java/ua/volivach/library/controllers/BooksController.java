@@ -27,11 +27,18 @@ public class BooksController {
     }
 
     @GetMapping()
-    public String index(@RequestParam(value = "page", defaultValue = "0") Integer page,
-                        @RequestParam(value = "size", defaultValue = "5") Integer size,
+    public String index(@RequestParam(value = "page", required = false) Integer page,
+                        @RequestParam(value = "size", required = false) Integer size,
+                        @RequestParam(value = "sort_by_year", required = false) boolean sortByYear,
                         Model model){
-        if(page != null && size != null) {
+        if(page != null && size != null && sortByYear) {
+            model.addAttribute("books", booksService.findAll(page, size, "year"));
+        }
+        else if(page != null && size != null) {
             model.addAttribute("books", booksService.findAll(page, size));
+        }
+        else if(sortByYear) {
+            model.addAttribute("books", booksService.findAll("year"));
         }
         else {
             model.addAttribute("books", booksService.findAll());

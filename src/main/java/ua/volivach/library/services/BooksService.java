@@ -2,6 +2,7 @@ package ua.volivach.library.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ua.volivach.library.repositories.BooksRepository;
@@ -29,6 +30,14 @@ public class BooksService {
 
     public List<Book> findAll(int page, int itemsPerPage) {
         return booksRepository.findAll(PageRequest.of(page, itemsPerPage)).getContent();
+    }
+
+    public List<Book> findAll(String sortBy) {
+        return booksRepository.findAll(Sort.by(sortBy));
+    }
+
+    public List<Book> findAll(int page, int itemsPerPage, String sortBy) {
+        return booksRepository.findAll(PageRequest.of(page, itemsPerPage, Sort.by(sortBy))).getContent();
     }
 
     public Book findOne(int id) {
@@ -68,5 +77,6 @@ public class BooksService {
     public Optional<Person> getBookOwner(int id) {
         return booksRepository.findById(id).map(Book::getOwner);
     }
+
 
 }
